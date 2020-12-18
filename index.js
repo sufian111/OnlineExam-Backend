@@ -21,6 +21,11 @@ const client = new MongoClient(uri, {
 });
 client.connect((err) => {
   const questionCollection = client.db("exam").collection("questionDb");
+
+  const allAssessmentCollection = client
+    .db("exam")
+    .collection("allAssessmentQuestion");
+
   const reimaginationQuestionCollection = client
     .db("exam")
     .collection("reimaginationQuestionDb");
@@ -35,6 +40,13 @@ client.connect((err) => {
     .collection("resonanceQuestionDb");
 
   console.log("conect");
+
+  /*   get all assessment questionCollection the question */
+  app.get("/allAssessmentQuestion", (req, res) => {
+    allAssessmentCollection.find({}).toArray((err, result) => {
+      res.send(result);
+    });
+  });
 
   /*   get relatability the question */
   app.get("/relatabilityQuestion", (req, res) => {
