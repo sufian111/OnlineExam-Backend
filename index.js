@@ -22,22 +22,11 @@ const client = new MongoClient(uri, {
 client.connect((err) => {
   const questionCollection = client.db("exam").collection("questionDb");
 
+  const answerCollection = client.db("exam").collection("allAnswerWithEmail");
+
   const allAssessmentCollection = client
     .db("exam")
     .collection("allAssessmentQuestion");
-
-  const reimaginationQuestionCollection = client
-    .db("exam")
-    .collection("reimaginationQuestionDb");
-  const reorientQuestionCollection = client
-    .db("exam")
-    .collection("reorientQuestionDb");
-  const reframingQuestionCollection = client
-    .db("exam")
-    .collection("reframingQuestionDb");
-  const resonanceQuestionCollection = client
-    .db("exam")
-    .collection("resonanceQuestionDb");
 
   console.log("conect");
 
@@ -48,38 +37,26 @@ client.connect((err) => {
     });
   });
 
-  /*   get relatability the question */
-  app.get("/relatabilityQuestion", (req, res) => {
-    questionCollection.find({}).toArray((err, result) => {
-      res.send(result);
-    });
-  });
+  //   all questionBy header
+  app.post("/questionByHeader", (req, res) => {
+    //---------------- get a users Ordered Items by email
+    allAssessmentCollection
+      .find({ header: req.body.header })
+      .toArray((err, documents) => {
+        res.send(documents);
+      });
 
-  /*   get resonance the question */
-  app.get("/resonanceQuestion", (req, res) => {
-    resonanceQuestionCollection.find({}).toArray((err, result) => {
-      res.send(result);
-    });
-  });
-
-  /*   get reframing the question */
-  app.get("/reframingQuestion", (req, res) => {
-    reframingQuestionCollection.find({}).toArray((err, result) => {
-      res.send(result);
-    });
-  });
-
-  /*   get reorient the question */
-  app.get("/reorientQuestion", (req, res) => {
-    reorientQuestionCollection.find({}).toArray((err, result) => {
-      res.send(result);
-    });
-  });
-
-  /*   get reimagination the question */
-  app.get("/reimaginationQuestion", (req, res) => {
-    reimaginationQuestionCollection.find({}).toArray((err, result) => {
-      res.send(result);
+    /*all answer with email address */
+    app.post("/addAnswer", (req, res) => {
+      const answer = req.body;
+      console.log(answer);
+      // answerCollection.insertOne(review, (err) => {
+      //   if (err) {
+      //     throw err;
+      //   } else {
+      //     res.send({ status: "document added" });
+      //   }
+      // });
     });
   });
 
