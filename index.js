@@ -30,6 +30,22 @@ client.connect((err) => {
 
   console.log("conect");
 
+  app.post("/answerByEmail", (req, res) => {
+    answerCollection
+      .find({ email: req.body.email })
+      .toArray((err, documents) => {
+        res.send(documents);
+      });
+  });
+
+  /*all answer*/
+
+  app.get("/allAnswer", (req, res) => {
+    answerCollection.find({}).toArray((err, result) => {
+      res.send(result);
+    });
+  });
+
   /*   get all assessment questionCollection the question */
   app.get("/allAssessmentQuestion", (req, res) => {
     allAssessmentCollection.find({}).toArray((err, result) => {
@@ -49,14 +65,14 @@ client.connect((err) => {
     /*all answer with email address */
     app.post("/addAnswer", (req, res) => {
       const answer = req.body;
-      console.log(answer);
-      // answerCollection.insertOne(review, (err) => {
-      //   if (err) {
-      //     throw err;
-      //   } else {
-      //     res.send({ status: "document added" });
-      //   }
-      // });
+      console.log(answer.length);
+      answerCollection.insertOne(answer, (err) => {
+        if (err) {
+          throw err;
+        } else {
+          res.send({ status: "document added" });
+        }
+      });
     });
   });
 
