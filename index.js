@@ -10,7 +10,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello World e!");
+  res.send("Hello World !");
 });
 
 const uri =
@@ -20,13 +20,12 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
 });
 client.connect((err) => {
-  const questionCollection = client.db("exam").collection("questionDb");
-
   const answerCollection = client.db("exam").collection("allAnswerWithEmail");
-
-  const allAssessmentCollection = client
+  const allQuestionCollection = client
     .db("exam")
-    .collection("allAssessmentQuestion");
+    .collection("assessmentQuestion");
+
+  const questionCollection = client.db("exam").collection("assessmentQuestion");
 
   console.log("conect");
 
@@ -36,6 +35,25 @@ client.connect((err) => {
       .toArray((err, documents) => {
         res.send(documents);
       });
+  });
+  /*all question*/
+
+  app.get("/question", (req, res) => {
+    questionCollection.find({}).toArray((err, result) => {
+      res.send(result);
+    });
+  });
+
+  /*set Question */
+  app.post("/setQuestion", (req, res) => {
+    const question = req.body;
+    questionCollection.insertOne(question, (err) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send({ status: "document added" });
+      }
+    });
   });
 
   /*all answer*/
@@ -56,7 +74,7 @@ client.connect((err) => {
   //   all questionBy header
   app.post("/questionByHeader", (req, res) => {
     //---------------- get a users Ordered Items by email
-    allAssessmentCollection
+    questionCollection
       .find({ header: req.body.header })
       .toArray((err, documents) => {
         res.send(documents);
