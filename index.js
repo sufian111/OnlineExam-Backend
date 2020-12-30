@@ -26,8 +26,27 @@ client.connect((err) => {
     .collection("assessmentQuestion");
 
   const questionCollection = client.db("exam").collection("assessmentQuestion");
+  const userCollection = client.db("exam").collection("userDataBase");
 
-  console.log("conect to dataBase");
+  console.log("conect");
+  /* user data  */
+
+  app.post("/userDetails", (req, res) => {
+    userCollection.find({ email: req.body.email }).toArray((err, documents) => {
+      res.send(documents);
+    });
+  });
+
+  app.post("/addUser", (req, res) => {
+    const userDetails = req.body;
+    userCollection.insertOne(userDetails, (err) => {
+      if (err) {
+        throw err;
+      } else {
+        res.send({ status: "document added" });
+      }
+    });
+  });
 
   app.post("/answerByEmail", (req, res) => {
     answerCollection
