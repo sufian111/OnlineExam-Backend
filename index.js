@@ -28,7 +28,7 @@ client.connect((err) => {
   const questionCollection = client.db("exam").collection("assessmentQuestion");
   const userCollection = client.db("exam").collection("userDataBase");
 
-  console.log("conect");
+  console.log("conect to the database");
   /* user data  */
 
   app.post("/userDetails", (req, res) => {
@@ -102,7 +102,7 @@ client.connect((err) => {
     /*all answer with email address */
     app.post("/addAnswer", (req, res) => {
       const answer = req.body;
-      console.log(answer.length);
+
       answerCollection.insertOne(answer, (err) => {
         if (err) {
           throw err;
