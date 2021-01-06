@@ -28,7 +28,7 @@ client.connect((err) => {
   const questionCollection = client.db("exam").collection("assessmentQuestion");
   const userCollection = client.db("exam").collection("userDataBase");
 
-  console.log("conect to the database");
+  console.log("conect ");
   /* user data  */
 
   app.post("/userDetails", (req, res) => {
